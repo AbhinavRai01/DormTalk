@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DebugDen - Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+  <!-- Header -->
+  <%- include('partials/head') %>
+
+
+  <!-- Main Content -->
+  <% for(let i = 0; i< questions.length; i++) { %>
+    <div class="max-w-7xl mx-auto px-6 py-16">
+        <p>
+            <% for(let j = 0; j < questions[i].tags.length; j++) { %>
+                <span class="bg-slate-200 text-slate-800 px-2 py-1 rounded-full text-sm font-semibold mr-2"><%= questions[i].tags[j] %></span>
+            <% } %>
+        </p>
+      <h2 class="text-4xl font-bold text-slate-800 mb-4"><%= questions[i].question %></h2>
+      <p class="text-lg text-slate-600">Asked by: <%= questions[i].senderID %></p>
+    </div>  
+    <% } %>
+
+  <!-- Footer -->
+ <%- include('partials/footer') %>
+
+  <!-- Scripts -->
+  <script>
+    // Add any custom JavaScript here
+  </script>
+
+</body>
+</html>
