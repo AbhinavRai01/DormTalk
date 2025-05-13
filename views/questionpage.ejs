@@ -19,17 +19,18 @@
 
 
   <!-- Main Content -->
-  <% for(let i = 0; i< questions.length; i++) { %>
-    <div class="max-w-7xl mx-auto px-6 py-16" onclick="location.href='/questions/<%= questions[i]._id %>'">
-        <p>
-            <% for(let j = 0; j < questions[i].tags.length; j++) { %>
-                <span class="bg-slate-200 text-slate-800 px-2 py-1 rounded-full text-sm font-semibold mr-2"><%= questions[i].tags[j] %></span>
-            <% } %>
-        </p>
-      <h2 class="text-4xl font-bold text-slate-800 mb-4"><%= questions[i].question %></h2>
-      <p class="text-lg text-slate-600">Asked by: <%= questions[i].senderID %></p>
-    </div>  
-    <% } %>
+  <main class="max-w-7xl mx-auto px-6 py-16">
+
+    <p>
+      <% for(let j = 0; j < question.tags.length; j++) { %>
+        <span class="bg-slate-200 text-slate-800 px-2 py-1 rounded-full text-sm font-semibold mr-2"><%= question.tags[j] %></span>
+      <% } %>
+    </p>
+
+    <h2 class="text-4xl font-bold text-slate-800 mb-4"><%= question.question %></h2>
+    <p class="text-lg text-slate-600">Asked by: <%= question.senderID %></p>
+    <p class="text-lg text-slate-600">Description: <%= question.description %></p>
+  </main>
 
   <!-- Footer -->
  <%- include('partials/footer') %>
