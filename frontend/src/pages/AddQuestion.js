@@ -1,7 +1,11 @@
-import React from 'react'
+import React, { use } from 'react'
 import { useState } from 'react'
+import { useAuthContext } from '../hooks/useAuthContext';
+
 
 export default function AddQuestion() {
+
+  const {user} = useAuthContext();
 
   const [questionName, setQuestionName] = useState("");
   const [questionDescription, setQuestionDescription] = useState("");
@@ -23,7 +27,7 @@ export default function AddQuestion() {
       question: questionName,
       description: questionDescription,
       tags: tags,
-      senderID: "Abhinav123" // Replace with actual user ID
+      senderID: user.userId // Replace with actual user ID
     };
 
     console.log("Question Data:", questionData);

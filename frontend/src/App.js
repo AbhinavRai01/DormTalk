@@ -9,6 +9,9 @@ import SpecificQuestion from './pages/SpecificQuestion';
 import Header
  from './pages/components/Header';
 import Footer from './pages/components/Footer';
+import SignUp from './pages/SignUp';
+import Login from './pages/Login';
+import Profile from './pages/ProfilePage';
 
 function App() {
   return (
@@ -21,6 +24,9 @@ function App() {
             <Route path="/all-questions" element={<AllQuestions />} />
             <Route path="/all-questions/:questionId" element={<SpecificQuestion />} />
             <Route path="/add-question" element={<AddQuestion />} />
+            <Route path="/register" element={<SignUp />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </Router>
       </main>

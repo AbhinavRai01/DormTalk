@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const questionRoutes = require("./routers/questionRoutes");
 const userRoutes = require("./routers/userRoutes");
+const answerRoutes = require("./routers/answerRoutes");
 const cors = require("cors");
 
 const Question = require("./schemas/questions");
@@ -25,6 +26,7 @@ app.use(express.json());
 
 app.use('/api/questions', questionRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/answers', answerRoutes);
 
 app.use(express.urlencoded({ extended: true }));
 

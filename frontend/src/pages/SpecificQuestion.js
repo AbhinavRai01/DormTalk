@@ -6,7 +6,18 @@ export default function SpecificQuestion() {
   const [question, setQuestion] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const [answerText, setAnswerText] = useState("");
+
+    const handleAnswerSubmit = (e) => {
+      e.preventDefault();
+      // TODO: handle the answer submission (e.g., POST request)
+      console.log("Answer submitted:", answerText);
+      setAnswerText(""); // optional reset
+    };
+
   useEffect(() => {
+
+    
     const fetchQuestion = async () => {
       console.log("Question id:", questionId);
       try {
@@ -43,6 +54,7 @@ export default function SpecificQuestion() {
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-16 bg-white shadow-md rounded-2xl border border-slate-200">
+      {/* Existing Question Content */}
       <div className="mb-4 flex flex-wrap gap-2">
         {question.tags.map((tag, index) => (
           <span
@@ -54,8 +66,36 @@ export default function SpecificQuestion() {
         ))}
       </div>
       <h1 className="text-4xl font-bold text-slate-800 mb-4">{question.question}</h1>
-      <p className="text-lg text-slate-600 mb-2">Asked by: <span className="font-medium text-slate-700">{question.senderID}</span></p>
-      <p className="text-md text-slate-700 leading-relaxed">Description: {question.description}</p>
+      <p className="text-lg text-slate-600 mb-2">
+        Asked by: <span className="font-medium text-slate-700">{question.senderID}</span>
+      </p>
+      <p className="text-md text-slate-700 leading-relaxed mb-8">
+        Description: {question.description}
+      </p>
+
+      {/* Answer Form */}
+      <form className="mt-10" onSubmit={handleAnswerSubmit}>
+        <label htmlFor="answer" className="block text-lg font-medium text-slate-800 mb-2">
+          Your Answer
+        </label>
+        <textarea
+          id="answer"
+          name="answer"
+          rows="6"
+          value={answerText}
+          onChange={(e) => setAnswerText(e.target.value)}
+          className="w-full p-4 border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800"
+          placeholder="Write your answer here..."
+          required
+        ></textarea>
+        <button
+          type="submit"
+          className="mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md transition"
+        >
+          Submit Answer
+        </button>
+      </form>
     </div>
+
   );
 }
