@@ -10,6 +10,22 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true
+    },
+    followers:{
+        type: Number,
+        default: 0
+    },
+    likedQuestions: {
+        type: [String],
+        default: []
+    },
+    likedAnswers: {
+        type: [String],
+        default: []
+    },
+    followedUsers: {
+        type: [String],
+        default: []
     }
 }, { timestamps: true });
 

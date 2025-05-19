@@ -45,8 +45,26 @@ const addQuestion = async (req, res) => {
     }
 }
 
+const increaseLike = async (req, res) => {
+    const {questionId} = req.body;
+    const question = await Question.findById(questionId);
+    
+    question.likes ++;
+    await Question.updateOne({_id: questionId},{likes: question.likes});
+}
+
+const decreaseLike = async (req, res) => {
+    const {questionId} = req.body;
+    const question = await Question.findById(questionId);
+    
+    question.likes --;
+    await Question.updateOne({_id: questionId},{likes: question.likes});
+}
+
 module.exports = {
     getQuestions,
     getQuestion,
+    increaseLike,
+    decreaseLike,
     addQuestion
 }

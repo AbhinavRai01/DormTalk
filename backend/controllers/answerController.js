@@ -1,4 +1,4 @@
-const Answer = require('../models/Answer');
+const Answer = require('../schemas/answer');
 const mongoose = require('mongoose');
 const express = require('express');
 
@@ -44,8 +44,26 @@ const getAnswerForProfile = async (req, res) => {
     }
 }
 
+const increaseLike = async (req, res) => {
+    const {answerId} = req.body;
+    const answer = await answer.findById(answerId);
+    
+    answer.likes ++;
+    await Answer.updateOne({_id: answerId},{likes: answer.likes});
+}
+
+const decreaseLike = async (req, res) => {
+    const {answerId} = req.body;
+    const answer =  await Answer.findById(answerId);
+    
+    answer.likes --;
+    await Answer.updateOne({_id: answerId},{likes: answer.likes});
+}
+
 module.exports = {
     getAnswersForQuestion,
     addAnswer,
-    getAnswerForProfile
+    getAnswerForProfile,
+    increaseLike,
+    decreaseLike
 }

@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useAuthContext } from '../hooks/useAuthContext';
 
 export default function SpecificQuestion() {
+
+  const { user } = useAuthContext();
+
   const { questionId } = useParams();
+
+  const [answers, setAnswers] = useState([]);
   const [question, setQuestion] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -10,7 +16,26 @@ export default function SpecificQuestion() {
 
     const handleAnswerSubmit = (e) => {
       e.preventDefault();
-      // TODO: handle the answer submission (e.g., POST request)
+      const answer = {
+        questionID : questionId,
+        senderID : user.userId,
+        content: answerText,
+        question: question.question
+      };
+
+      const response = fetch('http://localhost:5000/api/answers/add/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(answer),
+      });
+
+      if (!response.ok) {
+        console.error('Error submitting answer:', response.statusText);
+        return;
+      }
+
       console.log("Answer submitted:", answerText);
       setAnswerText(""); // optional reset
     };
@@ -33,7 +58,23 @@ export default function SpecificQuestion() {
       }
     };
 
+    const fetchAnswers = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/api/answers/question/${questionId}`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        console.log(data);
+        setAnswers(data);
+      } catch (error) {
+        console.error('Error fetching answers:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
     fetchQuestion();
+    fetchAnswers();
+
   }, [questionId]);
 
   if (loading) {
@@ -95,6 +136,22 @@ export default function SpecificQuestion() {
           Submit Answer
         </button>
       </form>
+      {/* Answers Section */}
+      <div className="mt-10">
+        <h2 className="text-2xl font-bold text-slate-800 mb-4">Answers</h2>
+        {answers.length === 0 ? (
+          <p className="text-slate-600">No answers yet. Be the first to answer!</p>
+        ) : (
+          answers.map((answer, index) => (
+            <div key={index} className="border border-slate-300 p-4 rounded-lg mb-4">
+              <p className="text-md text-slate-700">{answer.content}</p>
+              <p className="text-sm text-slate-500 mt-2">
+                Answered by: <span className="font-medium">{answer.senderID}</span>
+              </p>
+            </div>
+          ))
+        )}
+    </div>
     </div>
 
   );

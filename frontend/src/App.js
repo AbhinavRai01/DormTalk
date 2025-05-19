@@ -26,7 +26,7 @@ function App() {
             <Route path="/add-question" element={<AddQuestion />} />
             <Route path="/register" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/:userId" element={<Profile/>} />
           </Routes>
         </Router>
       </main>
