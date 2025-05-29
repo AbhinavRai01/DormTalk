@@ -14,7 +14,7 @@ router.get('/:id', getQuestion);
 router.post('/add', addQuestion);
 
 router.post('/like', increaseLike);
-router.post('/dislike', decreaseLike);
+router.post('/unlike', decreaseLike);
 
 // Export the router
 module.exports = router;

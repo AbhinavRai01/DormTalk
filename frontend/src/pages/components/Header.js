@@ -1,16 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useLogOut } from '../../hooks/useLogOut'
 import { useAuthContext } from '../../hooks/useAuthContext'
 import { useState } from 'react'
 
 export default function Header() {
 
-  const { user } = useAuthContext();
+  const { user, userObject } = useAuthContext();
   
   const { logout } = useLogOut()
   const handleLogout = () => {
     logout()
   }
+
+  useEffect(()=> {
+    console.log("lund: ", userObject);
+  }, [userObject])
   return (
   <header className="bg-slate-900 text-white shadow-md px-8 py-6">
   <div className="w-full mx-auto flex flex-col md:flex-row justify-between items-center">

@@ -14,7 +14,7 @@ export default function SignUp() {
 
         await signUp(userId, password);
         if (!error) {
-            navigate('/login');
+            navigate('/');
         }
         
     }

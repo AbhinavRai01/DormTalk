@@ -15,12 +15,13 @@ const getAnswersForQuestion = async (req, res) => {
 }
 
 const addAnswer = async (req, res) => {
-    const { questionID, senderID, content, question } = req.body;
+    const { questionID, senderID, content, question , imageURL } = req.body;
     const newAnswer = new Answer({
         questionID,
         senderID,
         content,
-        question
+        question,
+        imageURL
     });
 
     try {
@@ -45,19 +46,35 @@ const getAnswerForProfile = async (req, res) => {
 }
 
 const increaseLike = async (req, res) => {
-    const {answerId} = req.body;
-    const answer = await answer.findById(answerId);
-    
-    answer.likes ++;
-    await Answer.updateOne({_id: answerId},{likes: answer.likes});
+    const { answerId } = req.body;
+    try {
+        const answer = await Answer.findById(answerId);
+        if (!answer) {
+            return res.status(404).send("Answer not found");
+        }
+        const likes = (answer.likes || 0) + 1;
+        await Answer.updateOne({ _id: answerId }, { likes: likes });
+        res.status(200).send("Like increased successfully");
+    } catch (err) {
+        console.error("Error increasing like", err);
+        res.status(500).send("Internal Server Error");
+    }
 }
 
 const decreaseLike = async (req, res) => {
-    const {answerId} = req.body;
-    const answer =  await Answer.findById(answerId);
-    
-    answer.likes --;
-    await Answer.updateOne({_id: answerId},{likes: answer.likes});
+    const { answerId } = req.body;
+    try {
+        const answer = await Answer.findById(answerId);
+        if (!answer) {
+            return res.status(404).send("Answer not found");
+        }
+        const likes = Math.max((answer.likes || 0) - 1, 0);
+        await Answer.updateOne({ _id: answerId }, { likes: likes });
+        res.status(200).send("Like decreased successfully");
+    } catch (err) {
+        console.error("Error decreasing like", err);
+        res.status(500).send("Internal Server Error");
+    }
 }
 
 module.exports = {

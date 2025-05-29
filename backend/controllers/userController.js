@@ -23,7 +23,7 @@ const loginUser = async (req, res) => {
 const getUser = async (req, res) => {
   const userId = req.params.id;
   try {
-    const user = await User.find({userId: userId});
+    const user = await User.findOne({userId: userId});
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -52,16 +52,18 @@ const followUser = async (req, res) => {
   const {followUserID, curUserID} = req.body;
 
   try{
-    const user = await User.find({userId: curUserID});
+    const user = await User.findOne({userId: curUserID});
     if(!user){
       return res.status(400).json({error: "User not found"});
     }
+    console.log(user);
     const followedUsers = user.followedUsers;
     if(followedUsers.includes(followUserID)){
       return res.status(400).json({error: "Already following this user"});
     }
     followedUsers.push(followUserID);
     await User.updateOne({userId: curUserID}, {followedUsers: followedUsers});
+    return res.status(200).json({ message: "Successfully followed the user" });
   }
   catch(err){
     console.error("Error following user", err);
@@ -73,7 +75,7 @@ const unfollowUser = async (req, res) => {
   const {unfollowUserID, curUserID} = req.body;
 
   try{
-    const user = await User.find({userId: curUserID});
+    const user = await User.findOne({userId: curUserID});
     if(!user){
       return res.status(400).json({error: "User not found"});
     }
@@ -83,6 +85,7 @@ const unfollowUser = async (req, res) => {
     }
     followedUsers.splice(followedUsers.indexOf(unfollowUserID), 1);
     await User.updateOne({userId: curUserID}, {followedUsers: followedUsers});
+    return res.status(200).json({ message: "Successfully unfollowed the user" });
   }
   catch(err){
     console.error("Error unfollowing user", err);
@@ -94,17 +97,21 @@ const likeQuestion = async (req, res) => {
   const {questionID, curUserID} = req.body;
 
   try{
-    const user = await User.find({userId: curUserID});
+    const user = await User.findOne({userId: curUserID});
+    var inc = 0;
     if(!user){
       return res.status(400).json({error: "User not found"});
     }
     const likedQuestions = user.likedQuestions;
     if(likedQuestions.includes(questionID)){
       likedQuestions.splice(likedQuestions.indexOf(questionID), 1);
+      inc = -1;
     }else{
       likedQuestions.push(questionID);
+      inc = 1;
     }
     await User.updateOne({userId: curUserID}, {likedQuestions: likedQuestions});
+    res.status(200).json({inc});
   }
   catch(err){
     console.log("Error liking/disliking post:", err);
@@ -116,17 +123,21 @@ const likeAnswer = async (req, res) => {
   const {answerID, curUserID} = req.body;
 
   try{
-    const user = await User.find({userId: curUserID});
+    const user = await User.findOne({userId: curUserID});
     if(!user){
       return res.status(400).json({error: "User not found"});
     }
     const likedAnswers = user.likedAnswers;
+    var inc = 0;
     if(likedAnswers.includes(answerID)){
       likedAnswers.splice(likedAnswers.indexOf(answerID), 1);
+      inc = -1;
     }else{
       likedAnswers.push(answerID);
+      inc = 1;
     }
     await User.updateOne({userId: curUserID}, {likedAnswers: likedAnswers});
+    res.status(200).json({inc});
   }
   catch(err){
     console.log("Error liking/disliking post:", err);
@@ -138,14 +149,17 @@ const increaseFollowers = async (req, res) => {
   const {userID} = req.body;
 
   try{
-    const user = await User.find({userId: userID});
+    const user = await User.findOne({userId: userID});
     if(!user){
       return res.status(400).json({error: "User not found"});
     }
-    const followers = user.followers;
+    var followers = user.followers;
     followers++;
+
+    console.log("followers: ", followers);
     await User
     .updateOne({userId: userID}, {followers: followers});
+    return res.status(200).json({ message: "Followers increased", followers });
   }
   catch(err){
     console.log("Error increasing followers:", err);
@@ -157,14 +171,16 @@ const decreaseFollowers = async (req, res) => {
   const {userID} = req.body;
 
   try{
-    const user = await User.find({userId: userID});
+    const user = await User.findOne({userId: userID});
     if(!user){
       return res.status(400).json({error: "User not found"});
     }
-    const followers = user.followers;
+    var followers = user.followers;
     followers--;
+    console.log("followers: ", followers);
     await User
     .updateOne({userId: userID}, {followers: followers});
+    return res.status(200).json({ message: "Followers decreased", followers });
   }
   catch(err){
     console.log("Error decreasing followers:", err);
@@ -172,4 +188,4 @@ const decreaseFollowers = async (req, res) => {
   }
 }
 
-module.exports = { getUser, signupUser, loginUser, followUser, likeQuestion, likeAnswer, increaseFollowers, decreaseFollowers};
+module.exports = { getUser, signupUser, loginUser,unfollowUser, followUser, likeQuestion, likeAnswer, increaseFollowers, decreaseFollowers};

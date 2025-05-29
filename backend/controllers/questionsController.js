@@ -28,12 +28,13 @@ const getQuestion = async (req, res) => {
 
 
 const addQuestion = async (req, res) => {
-    const { question, description, tags, senderID } = req.body;
+    const { question, description, tags, senderID, imageURL } = req.body;
     const newQuestion = new Question({
         question,
         description,
         tags,
-        senderID
+        senderID,
+        imageURL
     });
 
     try {
@@ -46,19 +47,33 @@ const addQuestion = async (req, res) => {
 }
 
 const increaseLike = async (req, res) => {
+    try{
     const {questionId} = req.body;
     const question = await Question.findById(questionId);
     
     question.likes ++;
     await Question.updateOne({_id: questionId},{likes: question.likes});
+
+    res.status(200).json("LIKES INCREASED");
+    }
+    catch(err){
+        res.status(500).json(err);
+    }
 }
 
 const decreaseLike = async (req, res) => {
+    try{
     const {questionId} = req.body;
     const question = await Question.findById(questionId);
     
     question.likes --;
     await Question.updateOne({_id: questionId},{likes: question.likes});
+     res.status(200).json("LIKES DECREASED");
+    }
+    catch(err){
+        res.status(500).json(err);
+    }
+
 }
 
 module.exports = {

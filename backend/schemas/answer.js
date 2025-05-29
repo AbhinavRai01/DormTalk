@@ -20,6 +20,9 @@ const answerSchema = new Schema({
     }, likes: {
         type: Number,
         default : 0
+    }, imageURL :{
+        type : String,
+        default : ""
     }
 }, { timestamps: true });
 
