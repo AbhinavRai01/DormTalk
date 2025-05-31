@@ -1,26 +1,30 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Search, Bell, Menu, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
+// Your existing QuestionList component with new design
 export default function QuestionList({ question }) {
-  const navigate = useNavigate();
+   const navigate = useNavigate(); // You'll need to import this
 
   return (
     <div
       onClick={() => navigate(`/all-questions/${question._id}`)}
-      className="bg-white shadow-md rounded-2xl p-6 border border-slate-200 cursor-pointer transition-transform duration-200 hover:scale-[1.02] hover:shadow-lg"
-    >
-      <div className="mb-2 flex flex-wrap gap-2">
-        {question.tags.map((tag, index) => (
-          <span
-            key={index}
-            className="bg-slate-200 text-slate-800 px-2 py-1 rounded-full text-sm font-semibold"
-          >
-            {tag}
-          </span>
-        ))}
+       className="flex items-start gap-4 p-6 rounded-xl cursor-pointer transition-all duration-200 group bg-white shadow-md hover:shadow-lg"
+ >
+      <div className="w-16 h-16 bg-gray-100 rounded-[20%] flex items-center justify-center flex-shrink-0 mt-1">
+        <Search className="w-4 h-4 text-gray-400" />
       </div>
-      <h2 className="text-2xl font-bold text-slate-800 mb-2">{question.question}</h2>
-      <p className="text-md text-slate-600">Asked by: {question.senderID}</p>
+      <div className="flex-1 min-w-0">
+        <h3 className="text-lg text-left font-semibold font-lexend text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+          {question.question}
+        </h3>
+        <p className="text-sm text-left font-lexend text-gray-600 leading-relaxed mb-3">
+          {question.description}
+        </p>
+      </div>
+      <div className="flex-shrink-0 text-right">
+        <span className="text-sm font-medium text-gray-600">{question.senderID}</span>
+      </div>
     </div>
   );
 }

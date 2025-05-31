@@ -16,9 +16,9 @@ import ImageTest from './pages/ImageTest';
 
 function App() {
   return (
-    <div className="App">
+    <div className="App" >
       <Header />
-      <main className="max-w-7xl mx-auto px-6 py-16">
+      <main className="font-lexend max-w-7xl mx-auto px-3 py-10 sm: px-6">
         <Router>
           <Routes>
             <Route path="/" element={<Home />} />

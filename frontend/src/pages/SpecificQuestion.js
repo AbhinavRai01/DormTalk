@@ -21,6 +21,7 @@ export default function SpecificQuestion() {
   const [answers, setAnswers] = useState([]);
   const [question, setQuestion] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [likesCount, setLikesCount] = useState(0);
 
   const [answerText, setAnswerText] = useState("");
 
@@ -51,7 +52,9 @@ export default function SpecificQuestion() {
           });
 
           if (response2.ok) {
+            setLikesCount(likesCount + 1);
             console.log("Liked question");
+
             setLike(true);
           } else {
             console.error("Failed to like question");
@@ -65,6 +68,7 @@ export default function SpecificQuestion() {
           });
 
           if (response2.ok) {
+            setLikesCount(likesCount - 1);
             console.log("Unliked question");
             setLike(false);
           } else {
@@ -141,6 +145,7 @@ useEffect(() => {
       const data = await response.json();
       console.log(data);
       setQuestion(data);
+      setLikesCount(data.likes);
     } catch (error) {
       console.error('Error fetching question:', error);
     } finally {
@@ -191,67 +196,118 @@ if (!question) {
 }
 
 return (
-  <div className="max-w-4xl mx-auto px-6 py-16 bg-white shadow-md rounded-2xl border border-slate-200">
-    {/* Existing Question Content */}
-    <div className="mb-4 flex flex-wrap gap-2">
+  <div className="mx-auto px-0 sm:px-6 bg-[#f9fafb] rounded-xl">
+  <div className="bg-white p-2 sm:p-6 rounded-2xl shadow-md">
+
+    {/* Question Title */}
+    <h1 className="text-3xl text-left sm:text-3xl font-[800] text-slate-800 mb-4 leading-snug">
+      {question.question}
+    </h1>
+    {/* Tags */}
+    <div className="mb-6 flex flex-wrap gap-2">
       {question.tags.map((tag, index) => (
         <span
           key={index}
-          className="bg-slate-200 text-slate-800 px-2 py-1 rounded-full text-sm font-semibold"
+          className="bg-gray-200 text-gray-800 px-3 py-1 rounded-full text-sm font-semibold"
         >
           {tag}
         </span>
       ))}
     </div>
-    <h1 className="text-4xl font-bold text-slate-800 mb-4">{question.question}</h1>
-    <p className="text-lg text-slate-600 mb-2">
-      Asked by: <span className="font-medium text-slate-700">{question.senderID}</span>
+
+    
+
+    {/* Author */}
+    <div className="flex items-center gap-3 mb-6">
+      <img
+        src="https://i.pravatar.cc/40" // placeholder avatar
+        alt="user avatar"
+        className="w-10 h-10 rounded-full"
+      />
+      <div className="text-slate-600 text-sm">
+        <span className="font-medium text-slate-700">By: {question.senderID}</span>
+      </div>
+    </div>
+
+    {/* Description */}
+    <p className="text-base text-left text-slate-700 leading-relaxed mb-6">
+       {question.description}
     </p>
-    <p className="text-md text-slate-700 leading-relaxed mb-8">
-      Description: {question.description}
-    </p>
-    <img src={question.imageURL} alt="question image" />
-    <p>{question.likes}</p>
-    <button onClick={likeQuestionHandle}>{like? "UnLike" : "Like"}</button>
+
+    {/* Optional Image */}
+    {question.imageURL && (
+      <img src={question.imageURL} alt="question" className="mb-6 rounded-lg border border-gray-200 shadow-sm" />
+    )}
+
+    {/* Like Button */}
+    <div className="flex items-center gap-4 mb-10">
+      <button
+        onClick={likeQuestionHandle}
+        className="px-4 py-2 text-sm rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
+      >
+        {like ? "Unlike" : "Like"}
+      </button>
+      <p className="text-gray-500 text-sm">{likesCount} {likesCount === 1 ? 'like' : 'likes'}</p>
+    </div>
 
     {/* Answer Form */}
-    <form className="mt-10" onSubmit={handleAnswerSubmit}>
-      <label htmlFor="answer" className="block text-lg font-medium text-slate-800 mb-2">
-        Your Answer
+    <form className="mb-12" onSubmit={handleAnswerSubmit}>
+  <label htmlFor="answer" className="block text-lg text-left font-[800] text-slate-800 mb-2">
+    Your Answer
+  </label>
+  <textarea
+    id="answer"
+    name="answer"
+    rows="5"
+    value={answerText}
+    onChange={(e) => setAnswerText(e.target.value)}
+    className="w-full p-4 bg-gray-100 text-slate-800 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+    placeholder="Write your answer here..."
+    required
+  ></textarea>
+
+  {/* Image Upload and Submit Button */}
+  <div className="mt-4 flex items-end justify-between gap-4 flex-wrap">
+    <div className="flex-1 min-w-[200px]">
+      <label className="block mb-1 text-sm text-left font-medium text-gray-700">
+        Upload image (optional)
       </label>
-      <textarea
-        id="answer"
-        name="answer"
-        rows="6"
-        value={answerText}
-        onChange={(e) => setAnswerText(e.target.value)}
-        className="w-full p-4 border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800"
-        placeholder="Write your answer here..."
-        required
-      ></textarea>
+      <input
+        type="file"
+        onChange={handleImageUpload}
+        className="block w-full text-sm text-gray-700"
+      />
+    </div>
 
-      <input type="file" onChange={handleImageUpload} />
+    <button
+      type="submit"
+      className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md transition"
+    >
+      Post Answer
+    </button>
+  </div>
+</form>
+</div>
 
 
-      <button
-        type="submit"
-        className="mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md transition"
-      >
-        Submit Answer
-      </button>
-    </form>
     {/* Answers Section */}
-    <div className="mt-10">
-      <h2 className="text-2xl font-bold text-slate-800 mb-4">Answers</h2>
+    <div>
+      <h2 className="text-2xl font-bold text-left text-slate-800 mb-6">Answers ({answers.length})</h2>
       {answers.length === 0 ? (
-        <p className="text-slate-600">No answers yet. Be the first to answer!</p>
+        <p className="text-slate-500">No answers yet. Be the first to answer!</p>
       ) : (
         answers.map((answer, index) => (
-          < AnswerList answer={answer} index={index} likedAnswer={userObject.likedAnswers} userId={user.userId} />
+          <AnswerList
+            key={answer._id || index}
+            answer={answer}
+            index={index}
+            likedAnswer={userObject.likedAnswers}
+            userId={user.userId}
+          />
         ))
       )}
     </div>
   </div>
-
 );
+
 }

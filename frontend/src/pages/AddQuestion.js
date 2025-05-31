@@ -80,7 +80,7 @@ export default function AddQuestion() {
 
     return (
       <div>
-        <main class="max-w-4xl mx-auto px-6 py-16">
+        <main class="max-w-4xl mx-auto px-2 py-4 sm: px-6 py-16">
           <h2 class="text-3xl font-bold text-slate-800 mb-8 text-center">Ask a Question</h2>
 
           <form action="/submit-question" method="POST" class="bg-white p-8 rounded-2xl shadow-md space-y-6">
