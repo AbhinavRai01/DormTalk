@@ -1,26 +1,33 @@
-import React, { use } from 'react'
-import { useState } from 'react'
+import React, { use, useEffect, useState } from 'react';
+import Select from 'react-select';
 import { useAuthContext } from '../hooks/useAuthContext';
-import {
-  ref,
-  uploadBytes,
-  getDownloadURL
-} from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../config/firebase";
-
+import { useNavigate } from 'react-router-dom';
 
 export default function AddQuestion() {
-
-  const { user } = useAuthContext();
+  const { user,loading } = useAuthContext();
+  const navigate = useNavigate();
 
   const [questionName, setQuestionName] = useState("");
   const [questionDescription, setQuestionDescription] = useState("");
   const [tags, setTags] = useState([]);
-
   const [url, setUrl] = useState("");
 
-  function handleImageUpload(event) {
+  const allTags = [
+    'Maths', 'Physics', 'Chemistry', 'Mechanical', 'Electrical', 'Civil', 'Computer Science',
+    'Electronics', 'Information Technology', 'Chemical Engineering', 'Biotechnology',
+    'Aerospace Engineering', 'Materials Science', 'Data Science', 'Artificial Intelligence'
+  ];
 
+  const tagOptions = allTags.map(tag => ({ value: tag, label: tag }));
+
+  const handleTagSelect = (selectedOptions) => {
+    const selectedTags = selectedOptions.map(option => option.value);
+    setTags(selectedTags);
+  };
+
+  const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (!file) return;
 
@@ -29,114 +36,101 @@ export default function AddQuestion() {
       .then((snapshot) => getDownloadURL(snapshot.ref))
       .then((url) => {
         console.log("Image URL:", url);
-        setUrl(url);  // Update the state with the image URL
-        // You can set this URL to state if you want to display the image
+        setUrl(url);
       })
       .catch((error) => {
         console.error("Upload error:", error);
       });
-    }
+  };
 
-    const handleTagChange = (e) => {
-      const { value, checked } = e.target;
-      console.log("Tag changed:", value, checked);
-      if (checked) {
-        setTags((prevTags) => [...prevTags, value]);
-      } else {
-        setTags((prevTags) => prevTags.filter((tag) => tag !== value));
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const questionData = {
+      question: questionName,
+      description: questionDescription,
+      tags: tags,
+      senderID: user.userId,
+      imageURL: url
+    };
+
+    try {
+      const response = await fetch('http://localhost:5000/api/questions/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(questionData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
+
+      const data = await response.json();
+      console.log('Question submitted successfully:', data);
+       // Redirect to the questions list page
+    } catch (error) {
+      console.error('Error submitting question:', error);
     }
+    navigate('/all-questions');
+  };
 
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      const questionData = {
-        question: questionName,
-        description: questionDescription,
-        tags: tags,
-        senderID: user.userId ,
-        imageURL : url
-      };
-
-      console.log("Question Data:", questionData);
-      try {
-        const response = await fetch('http://localhost:5000/api/questions/add', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(questionData),
-        });
-
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-
-        const data = await response.json();
-        console.log('Question submitted successfully:', data);
-      } catch (error) {
-        console.error('Error submitting question:', error);
-      }
+  useEffect(() => {
+    console.log("User:", user);
+    console.log("Loading:", loading);
+    if (!user && !loading) {
+      navigate('/login');
     }
+  }, [loading]);
 
-    return (
-      <div>
-        <main class="max-w-4xl mx-auto px-2 py-4 sm: px-6 py-16">
-          <h2 class="text-3xl font-bold text-slate-800 mb-8 text-center">Ask a Question</h2>
+  return (
+    <div>
+      <main className="max-w-4xl mx-auto px-2 py-4 sm:px-6 py-16">
+        <h2 className="text-3xl font-bold text-slate-800 mb-8 text-center">Ask a Question</h2>
 
-          <form action="/submit-question" method="POST" class="bg-white p-8 rounded-2xl shadow-md space-y-6">
-            <div>
-              <label for="question" class="block text-sm font-medium text-gray-700 mb-1">Question</label>
-              <input type="text" id="question" name="question" value={questionName} onChange={(e) => setQuestionName(e.target.value)}
-                class="w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-200 focus:border-blue-400 px-4 py-2"
-                placeholder="e.g. How does async/await work in JavaScript?" required />
-            </div>
+        <form className="bg-white p-8 rounded-2xl shadow-md space-y-6" onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="question" className="block text-sm font-medium text-gray-700 mb-1">Question</label>
+            <input type="text" id="question" name="question" value={questionName}
+              onChange={(e) => setQuestionName(e.target.value)}
+              className="w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-200 focus:border-blue-400 px-4 py-2"
+              placeholder="e.g. How does async/await work in JavaScript?" required />
+          </div>
 
-            <div>
-              <label for="description" class="block text-sm font-medium text-gray-700 mb-1" >Description</label>
-              <textarea id="description" name="description" rows="5" onChange={(e) => setQuestionDescription(e.target.value)}
-                class="w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-200 focus:border-blue-400 px-4 py-2"
-                placeholder="Describe your problem or question in detail..." required></textarea>
-            </div>
+          <div>
+            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+            <textarea id="description" name="description" rows="5"
+              onChange={(e) => setQuestionDescription(e.target.value)}
+              className="w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-200 focus:border-blue-400 px-4 py-2"
+              placeholder="Describe your problem or question in detail..." required></textarea>
+          </div>
 
-            <div>
-              <span class="block text-sm font-medium text-gray-700 mb-2">Tags</span>
-              <div class="flex flex-wrap gap-4">
-                <div class="flex items-center space-x-2">
-                  <input type="checkbox" id="tag-cpp" name="tags" value="cpp"
-                    class="border-gray-300 rounded shadow-sm focus:ring focus:ring-blue-200" onChange={handleTagChange} />
-                  <label for="tag-cpp" class="text-sm font-medium text-gray-700">C++</label>
-                </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Tags</label>
+            <Select
+              isMulti
+              name="tags"
+              options={tagOptions}
+              className="basic-multi-select"
+              classNamePrefix="select"
+              onChange={handleTagSelect}
+              placeholder="Search and select tags..."
+            />
+          </div>
 
-                <div class="flex items-center space-x-2" >
-                  <input type="checkbox" id="tag-webdev" name="tags" value="webdev"
-                    class="border-gray-300 rounded shadow-sm focus:ring focus:ring-blue-200" onChange={handleTagChange} />
-                  <label for="tag-webdev" class="text-sm font-medium text-gray-700"  >Web Development</label>
-                </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Upload Image</label>
+            <input type="file" onChange={handleImageUpload} />
+          </div>
 
-                <div class="flex items-center space-x-2">
-                  <input type="checkbox" id="tag-js" name="tags" value="javascript"
-                    class="border-gray-300 rounded shadow-sm focus:ring focus:ring-blue-200" onChange={handleTagChange} />
-                  <label for="tag-js" class="text-sm font-medium text-gray-700" >JavaScript</label>
-                </div>
-
-                <div class="flex items-center space-x-2">
-                  <input type="checkbox" id="tag-python" name="tags" value="python"
-                    class="border-gray-300 rounded shadow-sm focus:ring focus:ring-blue-200" onChange={handleTagChange} />
-                  <label for="tag-python" class="text-sm font-medium text-gray-700" >Python</label>
-                </div>
-              </div>
-            </div>
-            <div>Upload Image :  <input type="file" onChange={handleImageUpload} /></div>
-
-            <div class="text-right">
-              <button type="submit" onClick={handleSubmit}
-                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md shadow-sm font-medium transition">
-                Post Question
-              </button>
-            </div>
-          </form>
-        </main>
-
-      </div>
-    )
-  }
+          <div className="text-right">
+            <button type="submit"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md shadow-sm font-medium transition">
+              Post Question
+            </button>
+          </div>
+        </form>
+      </main>
+    </div>
+  );
+}

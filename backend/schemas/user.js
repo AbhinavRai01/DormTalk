@@ -3,6 +3,10 @@ const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
+    name:{
+        type: String,
+        required: true
+    },
     userId: {
         type: String,
         required: true
@@ -26,12 +30,20 @@ const userSchema = new Schema({
     followedUsers: {
         type: [String],
         default: []
+    },
+    imageURL:{
+        type: String,
+        default:"https://firebasestorage.googleapis.com/v0/b/forumapp-fead5.firebasestorage.app/o/profilephotos%2Fpp.jpg?alt=media&token=62168b08-8a30-4a39-a0b8-57c9af414224"
+    },
+    bio:{
+        type: String,
+        default: "Doesn't care enough to write a bio"
     }
 }, { timestamps: true });
 
-userSchema.statics.signup = async function (userId, password) {
+userSchema.statics.signup = async function (name, userId, password) {
     // validation
-    if (!userId || !password) {
+    if (!name || !userId || !password) {
         throw Error('All fields must be filled');
     }
     if (password.length < 6) {
@@ -48,7 +60,7 @@ userSchema.statics.signup = async function (userId, password) {
     const hash = await bcrypt.hash(password, salt);
     password = hash;
 
-    const user = await this.create({ userId, password });
+    const user = await this.create({name, userId, password });
     return user;
 }
 

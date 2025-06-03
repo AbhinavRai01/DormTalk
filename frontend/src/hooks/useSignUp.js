@@ -8,11 +8,11 @@ export const useSignUp = () => {
     const  [error, setError] = useState(null);
     const  [isLoading, setIsLoading] = useState(null);
     
-    const signUp = async (userId, password) => {
+    const signUp = async (name, userId, password) => {
         const response = await fetch('http://localhost:5000/api/users/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, password }),
+        body: JSON.stringify({ name, userId, password }),
         })
     
         const json = await response.json()

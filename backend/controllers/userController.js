@@ -36,9 +36,9 @@ const getUser = async (req, res) => {
 
 // signup a user
 const signupUser = async (req, res) => {
-const { userId, password } = req.body;
+const { name, userId, password } = req.body;
   try {
-    const user = await User.signup(userId, password);
+    const user = await User.signup(name, userId, password);
     // create a token
     const token = createToken(user._id);
 
@@ -188,4 +188,10 @@ const decreaseFollowers = async (req, res) => {
   }
 }
 
-module.exports = { getUser, signupUser, loginUser,unfollowUser, followUser, likeQuestion, likeAnswer, increaseFollowers, decreaseFollowers};
+
+const updateProfile = async(req,res) =>{
+  const userId = req.params.id;
+  const {name,bio,imageURL} = req.body;
+  await User.updateOne({userId: userId}, {name:name,bio:bio,imageURL:imageURL});
+}
+module.exports = { getUser, signupUser, loginUser,unfollowUser, followUser, likeQuestion, likeAnswer, increaseFollowers, decreaseFollowers, updateProfile};

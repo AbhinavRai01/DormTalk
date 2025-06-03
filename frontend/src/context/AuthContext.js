@@ -19,6 +19,7 @@ export const AuthContextProvider = ({ children }) => {
 
     const [state, dispatch] = useReducer(authReducer, {user:null});
     const [userObject, setUserObject] = useState({});
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('user'));
@@ -37,16 +38,18 @@ export const AuthContextProvider = ({ children }) => {
             } catch (error) {
                 console.error("Error fetching user object:", error);
             }
+            
         };
 
         fetchUserObject();
 
         }
+        setLoading(false);
 
     }, []);
 
   return (
-    <AuthContext.Provider value={{ ...state, dispatch, userObject }}>
+    <AuthContext.Provider value={{ ...state, dispatch, userObject,loading }}>
       {children}
     </AuthContext.Provider>
   )

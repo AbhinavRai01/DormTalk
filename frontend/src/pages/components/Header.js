@@ -18,41 +18,40 @@ export default function Header() {
   }, [userObject])
   return (
   <header className="white font-lexend text-grey-900 shadow-md px-8 py-6">
-  <div className="w-full mx-auto flex flex-col md:flex-row justify-between items-center">
-    <h1 className="text-3xl font-bold">DebugDen</h1>
-    <nav className="mt-4 md:mt-0 flex items-center space-x-4">
-      <a href="/" className="text-grey-900 hover:text-white font-medium">Home</a>
-      <a href="/topics" className="text-grey-900 hover:text-white font-medium">Topics</a>
+    <div className="w-full mx-auto flex flex-col md:flex-row justify-between items-center">
+      <h1 className="text-3xl font-bold">DebugDen</h1>
+      <nav className="mt-4 md:mt-0 flex items-center space-x-4">
+        <a href="/add-question" className="ttext-grey-900 px-3 hover:text-grey-600 font-medium hidden md:inline">Ask a Question</a>
+        <a href="/all-questions" className="text-grey-900 px-3 hover:text-grey-600 font-medium hidden md:inline">Answer Questions</a>
 
-      {!user && (
-        <div className="flex items-center space-x-3">
-          <a href="/login" className="text-grey-900 hover:text-white font-medium">Login</a>
-          <a href="/register" className="text-grey-900 hover:text-white font-medium">Register</a>
-        </div>
-      )}
+        {!user && (
+          <div className="flex items-center space-x-3">
+            <a href="/login" className="text-grey-900 px-3 hover:text-grey-600 font-medium">Login</a>
+            <a href="/register" className="text-grey-900 px-3 hover:text-grey-600 font-medium">Register</a>
+          </div>
+        )}
 
-      {user && (
-        <div className="flex items-center space-x-3">
-          <form >
+        {user && (
+          <div className="flex items-center space-x-3">
+            <form>
+              <button
+                type="submit"
+                onClick={handleLogout}
+                className="bg-slate-300 hover:bg-red-700 font-medium px-4 py-1.5 rounded-md transition duration-150"
+              >
+                Log Out
+              </button>
+            </form>
             <button
-              type="submit"
-              onClick={handleLogout}
-              className="bg-slate-300 hover:bg-red-700 font-medium px-4 py-1.5 rounded-md transition duration-150"
+              className="w-9 h-9 flex items-center justify-center rounded-full bg-slate-300 hover:bg-slate-600 transition duration-150"
+              onClick={() => window.location.href = '/profile/' + user.userId}
             >
-              Log Out
+              <User color='grey'/>
             </button>
-          </form>
-          <button className="w-9 h-9 flex items-center justify-center rounded-full bg-slate-300 hover:bg-slate-600 transition duration-150"
-          onClick={() => window.location.href = '/profile/' + user.userId}>
-            {/* Example SVG User Icon */}
-            <User color='grey'/>
-           
-          </button>
-        </div>
-      )}
-    </nav>
-  </div>
-</header>
-
+          </div>
+        )}
+      </nav>
+    </div>
+  </header>
   )
 }

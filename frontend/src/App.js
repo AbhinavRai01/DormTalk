@@ -12,7 +12,8 @@ import Footer from './pages/components/Footer';
 import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import Profile from './pages/ProfilePage';
-import ImageTest from './pages/ImageTest';
+import EditProfile from './pages/EditProfile';
+import NewHome from './pages/NewHome';
 
 function App() {
   return (
@@ -21,14 +22,15 @@ function App() {
       <main className="font-lexend max-w-7xl mx-auto px-3 py-10 sm: px-6">
         <Router>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<NewHome />} />
             <Route path="/all-questions" element={<AllQuestions />} />
             <Route path="/all-questions/:questionId" element={<SpecificQuestion />} />
             <Route path="/add-question" element={<AddQuestion />} />
             <Route path="/register" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile/:userId" element={<Profile/>} />
-            <Route path="/image-test" element={<ImageTest />} />
+            <Route path='/edit-profile' element={<EditProfile />} />
+            <Route path="/new-home" element={<NewHome />} />
           </Routes>
         </Router>
       </main>
