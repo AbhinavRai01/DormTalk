@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuthContext } from '../hooks/useAuthContext';
 import AnswerList from './components/AnswerList';
+import { useNavigate } from 'react-router-dom';
 
 import {
   ref,
@@ -11,6 +12,8 @@ import {
 import { storage } from "../config/firebase";
 
 export default function SpecificQuestion() {
+
+  const navigate = useNavigate();
 
   const [like, setLike] = useState(false);
 
@@ -22,6 +25,8 @@ export default function SpecificQuestion() {
   const [question, setQuestion] = useState(null);
   const [loading, setLoading] = useState(true);
   const [likesCount, setLikesCount] = useState(0);
+
+  const [pfp,setPfp] = useState(""); 
 
   const [answerText, setAnswerText] = useState("");
 
@@ -138,6 +143,7 @@ useEffect(() => {
 
 
   const fetchQuestion = async () => {
+
     console.log("Question id:", questionId);
     try {
       const response = await fetch(`http://localhost:5000/api/questions/${questionId}`);
@@ -146,6 +152,10 @@ useEffect(() => {
       console.log(data);
       setQuestion(data);
       setLikesCount(data.likes);
+
+      const imgResponse = await fetch(`http://localhost:5000/api/users/getpfp/${data.senderID}`);
+      const imgaData = await imgResponse.json();
+      setPfp(imgaData.imageURL);
     } catch (error) {
       console.error('Error fetching question:', error);
     } finally {
@@ -166,6 +176,7 @@ useEffect(() => {
       setLoading(false);
     }
   }
+  console.log("userObj: ",userObject.imageURL);
 
   if (userObject.likedQuestions) {
     if (userObject.likedQuestions.includes(questionId)) {
@@ -220,12 +231,12 @@ return (
     {/* Author */}
     <div className="flex items-center gap-3 mb-6">
       <img
-        src="https://i.pravatar.cc/40" // placeholder avatar
+        src={pfp} // placeholder avatar
         alt="user avatar"
         className="w-10 h-10 rounded-full"
       />
       <div className="text-slate-600 text-sm">
-        <span className="font-medium text-slate-700">By: {question.senderID}</span>
+        <span className="font-medium text-slate-700 hover:text-blue-600" onClick={() => {navigate('/profile/'+question.senderID)}}>By: {question.senderID}</span>
       </div>
     </div>
 
@@ -242,16 +253,19 @@ return (
     {/* Like Button */}
     <div className="flex items-center gap-4 mb-10">
       <button
-        onClick={likeQuestionHandle}
-        className="px-4 py-2 text-sm rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 transition"
-      >
+  onClick={likeQuestionHandle}
+  disabled={!user}
+  className={`px-4 py-2 text-sm rounded-md border text-gray-700 transition 
+    ${user ? 'bg-white border-gray-300 hover:bg-gray-100 cursor-pointer' : 'bg-gray-200 border-gray-200 cursor-not-allowed'}
+  `}
+>
         {like ? "Unlike" : "Like"}
       </button>
       <p className="text-gray-500 text-sm">{likesCount} {likesCount === 1 ? 'like' : 'likes'}</p>
     </div>
 
     {/* Answer Form */}
-    <form className="mb-12" onSubmit={handleAnswerSubmit}>
+  {user? (<form className="mb-12" onSubmit={handleAnswerSubmit}>
   <label htmlFor="answer" className="block text-lg text-left font-[800] text-slate-800 mb-2">
     Your Answer
   </label>
@@ -286,7 +300,7 @@ return (
       Post Answer
     </button>
   </div>
-</form>
+</form>):("sign in to answer")}
 </div>
 
 
@@ -301,8 +315,8 @@ return (
             key={answer._id || index}
             answer={answer}
             index={index}
-            likedAnswer={userObject.likedAnswers}
-            userId={user.userId}
+            likedAnswer={userObject? userObject.likedAnswers : []}
+            userId={user? user.userId: ""}
           />
         ))
       )}

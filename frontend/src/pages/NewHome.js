@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import bgremoved from '../assets/bgremoved.png';
 import { Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export default function NewHome() {
     const navigate = useNavigate();
+
+    const [searchTerm, setSearchTerm] = useState("");
+
+    const onSearchHandle = (e) => {
+      navigate('/all-questions',{
+        state : {question: searchTerm}
+      })
+    }
+
   return (
     <div className=" flex items-center justify-center px-6 py-6">
       <div className="max-w-7xl w-full grid md:grid-cols-2 gap-12 items-center">
@@ -28,8 +37,10 @@ export default function NewHome() {
                 type="text"
                 placeholder="Search for questions or topics..."
                 className="flex-grow bg-transparent outline-none text-gray-800 placeholder-gray-500"
+                value={searchTerm}
+                onChange={(e)=>setSearchTerm(e.target.value)}
               />
-              <button className="text-white bg-gray-500 rounded-full px-4 py-3 ml-2 hover:bg-gray-800 transition">
+              <button className="text-white bg-gray-500 rounded-full px-4 py-3 ml-2 hover:bg-gray-800 transition" onClick={onSearchHandle}>
                 <Search className="w-6 h-6" />
               </button>
             </div>

@@ -19,11 +19,13 @@ export default function QuestionList({ question }) {
           {question.question}
         </h3>
         <p className="text-sm text-left font-lexend text-gray-600 leading-relaxed mb-3">
-          {question.description}
+          { question.description.split(" ").length > 30
+    ? question.description.split(" ").slice(0, 30).join(" ") + "..."
+    : question.description}
         </p>
       </div>
       <div className="flex-shrink-0 text-right">
-        <span className="text-sm font-medium text-gray-600">{question.senderID}</span>
+        <span className="hidden text-sm font-medium text-gray-600 md:inline">{question.senderID}</span>
       </div>
     </div>
   );

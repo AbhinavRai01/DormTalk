@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import QuestionList from './components/QuestionList';
 import { Search } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import Select from 'react-select';
 
 export default function AllQuestions() {
+  const location = useLocation();
+
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchTermTemprory,setTemprory] = useState('');
+  const [searchTermTemprory, setTemprory] = useState('');
   const [selectedTags, setSelectedTags] = useState([]);
   const [page, setPage] = useState(0);
+  const [count, setCount] = useState(0);
 
   const allTags = [
     'Maths', 'Physics', 'Chemistry', 'Mechanical', 'Electrical', 'Civil', 'Computer Science',
@@ -19,8 +23,15 @@ export default function AllQuestions() {
 
   useEffect(() => {
     const fetchQuestions = async () => {
+    
+      const passedState = location.state;
+
+      if (passedState) {
+        setSearchTerm(passedState.question);
+      }
       setLoading(true);
       try {
+        
         const response = await fetch('http://localhost:5000/api/questions/search', {
           method: 'POST',
           headers: {
@@ -33,9 +44,16 @@ export default function AllQuestions() {
           }),
         });
 
+
+
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
-        setQuestions(data);
+
+        console.log(data);
+        setQuestions(data.questions);
+        setCount(parseInt(data.count));
+
+        console.log("count:", count);
       } catch (error) {
         console.error('Error fetching questions:', error);
       } finally {
@@ -54,7 +72,7 @@ export default function AllQuestions() {
     setTemprory(e.target.value);
   };
 
-  const handleSearchSubmit = (e) =>{
+  const handleSearchSubmit = (e) => {
     setSearchTerm(searchTermTemprory);
   }
 
@@ -135,12 +153,10 @@ export default function AllQuestions() {
 
           {!loading && (
             <div className="text-sm text-gray-500 mb-6">
-              <>Showing {questions.length} total questions</>
+              <>Showing {count} total questions</>
             </div>
           )}
         </div>
-
-        {/* Questions List */}
         {loading ? (
           <div className="text-center py-16">
             <div className="inline-flex items-center gap-3">
@@ -170,9 +186,15 @@ export default function AllQuestions() {
           </div>
         )}
       </main>
+      <div className={`grid grid-cols-${Math.ceil(count / 10)} w-[50%] items-center mx-auto`}>
+        {Array.from({ length: Math.ceil(count / 10) }).map((_, i) => (
+          <button key={i} className="p-2 bg-gray-200 w-[7%] rounded items-center mx-auto hover:bg-gray-300"onClick={(e)=>{setPage(i)}}>
+            {i + 1}
+          </button>
+        ))}
+      </div>
 
-      {/* Footer */}
-      
-    </div>
+
+    </div >
   );
 }

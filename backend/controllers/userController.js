@@ -194,4 +194,17 @@ const updateProfile = async(req,res) =>{
   const {name,bio,imageURL} = req.body;
   await User.updateOne({userId: userId}, {name:name,bio:bio,imageURL:imageURL});
 }
-module.exports = { getUser, signupUser, loginUser,unfollowUser, followUser, likeQuestion, likeAnswer, increaseFollowers, decreaseFollowers, updateProfile};
+
+
+const getProfilePicture = async(req,res) =>{
+  const userId = req.params.id;
+  const imageUrl = await User.findOne({userId}, 'imageURL');
+  console.log(imageUrl);
+
+  if(!imageUrl){
+    res.status(404).json({message: "ImageUrl not found"});
+  }
+
+  res.status(200).json(imageUrl);
+}
+module.exports = { getUser, signupUser, loginUser,unfollowUser, followUser, likeQuestion, likeAnswer, increaseFollowers, decreaseFollowers, updateProfile,getProfilePicture};

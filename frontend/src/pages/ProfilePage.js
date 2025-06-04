@@ -98,7 +98,7 @@ const Profile = () => {
   };
 
 
-  const [isCurrentUser,setIsCur] = useState(false);
+  const [isCurrentUser, setIsCur] = useState(false);
 
   useEffect(() => {
 
@@ -188,14 +188,20 @@ const Profile = () => {
             >
               Edit Profile
             </button>
-          ) : (
+          ) : activeUser ? (
             <button
               onClick={followHandler}
               className="mt-4 sm:mt-0 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
             >
               {following ? 'Following' : 'Follow'}
             </button>
+          ) : (
+            <button
+              onClick={() => navigate('/login')}
+              className="mt-4 sm:mt-0 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+            >Login to follow</button>
           )}
+
 
         </div>
 
@@ -241,7 +247,7 @@ const Profile = () => {
           {activeTab === 'questions' ? (
             <ul className="space-y-4">
               {questions.map((q) => (
-                <li key={q._id} className="bg-gray-50 p-4 rounded-lg shadow-sm">
+                <li key={q._id} className="bg-gray-50 p-4 rounded-lg shadow-sm" onClick={()=>{navigate('/all-questions/'+q._id)}}>
                   <h3 className="text-lg font-semibold text-gray-800">{q.question}</h3>
                   <p className="text-gray-600">{q.description}</p>
                 </li>
@@ -250,7 +256,7 @@ const Profile = () => {
           ) : (
             <ul className="space-y-4">
               {answers.map((a) => (
-                <li key={a._id} className="bg-gray-50 p-4 rounded-lg shadow-sm">
+                <li key={a._id} className="bg-gray-50 p-4 rounded-lg shadow-sm" onClick={()=>{navigate('/all-questions/'+ a.questionID)}}>
                   <h3 className="text-lg font-semibold text-gray-800">{a.question}</h3>
                   <p className="text-gray-600">{a.content}</p>
                 </li>

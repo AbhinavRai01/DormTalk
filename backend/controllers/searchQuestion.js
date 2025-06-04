@@ -12,18 +12,31 @@ const searchQuestion = async (req, res) => {
 
   const queryTags = (tags.length === 0 ? allTags: tags);
 
-    const searchQuery = {
-        question : {$regex: searchTerm, $options:"i"},
-        tags : {$in: queryTags}
-    }
+const searchQuery = {
+  tags: { $in: queryTags }  // Always apply tag filter
+};
+
+// Conditionally add the search term if it's not empty
+if (searchTerm && searchTerm.trim() !== "") {
+  searchQuery.question = { $regex: searchTerm, $options: "i" };
+}
+
 
 
      try{
         const reqQuestions = await Question.find(searchQuery)
         .skip(10*page)
         .limit(10)
+        .sort({createdAt: -1})
 
-        res.status(200).json(reqQuestions);
+        const count = await Question.countDocuments(searchQuery)
+
+
+
+        res.status(200)
+        .json({questions:reqQuestions,
+               count: count
+            });
      }
      catch(err){
         console.log(err);
@@ -31,5 +44,6 @@ const searchQuestion = async (req, res) => {
      }
 
 };
+
 
 module.exports = {searchQuestion};
