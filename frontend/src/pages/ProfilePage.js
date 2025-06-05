@@ -33,7 +33,7 @@ const Profile = () => {
       activeUser.followedUsers = activeUser.followedUsers.filter(id => id !== userId);
 
       try {
-        const response1 = await fetch('http://localhost:5000/api/users/unfollowuser', {
+        const response1 = await fetch('https://dormtalk.onrender.com/api/users/unfollowuser', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ unfollowUserID: userId, curUserID: a }),
@@ -42,7 +42,7 @@ const Profile = () => {
         if (response1.ok) {
           console.log("Unfollow Response:", await response1.json());
 
-          const response2 = await fetch('http://localhost:5000/api/users/decreaseFollowers', {
+          const response2 = await fetch('https://dormtalk.onrender.com/api/users/decreaseFollowers', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userID: userId }),
@@ -66,7 +66,7 @@ const Profile = () => {
       activeUser.followedUsers.push(userId);
 
       try {
-        const response1 = await fetch('http://localhost:5000/api/users/followuser', {
+        const response1 = await fetch('https://dormtalk.onrender.com/api/users/followuser', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ followUserID: userId, curUserID: a }),
@@ -75,7 +75,7 @@ const Profile = () => {
         if (response1.ok) {
           console.log("Follow Response:", await response1.json());
 
-          const response2 = await fetch('http://localhost:5000/api/users/increaseFollowers', {
+          const response2 = await fetch('https://dormtalk.onrender.com/api/users/increaseFollowers', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userID: userId }),
@@ -106,7 +106,7 @@ const Profile = () => {
     const fetchUserData = async () => {
       try {
 
-        const currentUser = await fetch(`http://localhost:5000/api/users/${userId}`);
+        const currentUser = await fetch(`https://dormtalk.onrender.com/api/users/${userId}`);
         if (!currentUser.ok) throw new Error(`HTTP error! status: ${currentUser.status}`);
 
         const userData = await currentUser.json();
@@ -116,7 +116,7 @@ const Profile = () => {
 
         setFollowers(userData.followers);
 
-        const activeUser = await fetch(`http://localhost:5000/api/users/${user.userId}`);
+        const activeUser = await fetch(`https://dormtalk.onrender.com/api/users/${user.userId}`);
         const activeUserData = await activeUser.json();
 
         console.log("active User Data", activeUserData)
@@ -129,7 +129,7 @@ const Profile = () => {
         console.log("CurUser", userData);
         console.log("Active User", activeUserData);
 
-        const questions = await fetch(`http://localhost:5000/api/questions/`);
+        const questions = await fetch(`https://dormtalk.onrender.com/api/questions/`);
         if (!questions.ok) throw new Error(`HTTP error! status: ${questions.status}`);
         const questionsData = await questions.json();
         //filter out the questions asked by the user
@@ -138,7 +138,7 @@ const Profile = () => {
         setQuestionsAsked(questionsAsked.length); //set the questions asked by the user
         //give the length of the questions asked
 
-        const Answers = await fetch(`http://localhost:5000/api/answers/profile/${userId}`);
+        const Answers = await fetch(`https://dormtalk.onrender.com/api/answers/profile/${userId}`);
         if (!Answers.ok) throw new Error(`HTTP error! status: ${answers.status}`);
         const answersData = await Answers.json();
 

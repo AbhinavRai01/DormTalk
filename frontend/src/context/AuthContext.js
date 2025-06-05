@@ -28,7 +28,7 @@ export const AuthContextProvider = ({ children }) => {
 
             const fetchUserObject = async () => {
             try {
-                const res = await fetch('http://localhost:5000/api/users/' + user.userId);
+                const res = await fetch('https://dormtalk.onrender.com/api/users/' + user.userId);
                 if (res.ok) {
                     const data = await res.json();
                     setUserObject(data);

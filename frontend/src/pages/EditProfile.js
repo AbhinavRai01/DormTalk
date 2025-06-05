@@ -7,9 +7,11 @@ import {
   getDownloadURL
 } from "firebase/storage";
 import { storage } from "../config/firebase";
+import { useNavigate } from 'react-router-dom';
 
 export default function EditProfile() {
 
+  const navigate = useNavigate();
   const userData = localStorage.getItem('user');
   const user = userData ? JSON.parse(userData) : null;
   const [name, setName] = useState('Ava Johnson');
@@ -50,7 +52,7 @@ export default function EditProfile() {
     const userId = user.userId;
     const updateUserData = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/users/update/${userId}`, {
+        const response = await fetch(`https://dormtalk.onrender.com/api/users/update/${userId}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -67,11 +69,14 @@ export default function EditProfile() {
         }
         const data = await response.json();
         console.log('User data updated successfully:', data);
+
       } catch (error) {
         console.error('Error updating user data:', error);
       }
     }
     updateUserData()
+    
+        navigate('/profile/'+ userId);
   };
 
   useEffect(() =>{
@@ -80,7 +85,7 @@ export default function EditProfile() {
         console.log(userId);
         const fetchUserData = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/api/users/${userId}`);
+                const response = await fetch(`https://dormtalk.onrender.com/api/users/${userId}`);
 
                 console.log(response);
                 if (!response.ok) {
@@ -90,6 +95,7 @@ export default function EditProfile() {
                 console.log(data);
                 setName(data.name || '');
                 setBio(data.bio || '');
+                setProfilePic(data.imageURL || '/avatar-placeholder.jpg');
                 setImagePreview(data.imageURL || '/avatar-placeholder.jpg');
             } catch (error) {
                 console.error('Error fetching user data:', error);
