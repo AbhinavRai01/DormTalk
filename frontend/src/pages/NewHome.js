@@ -21,7 +21,7 @@ export default function NewHome() {
         {/* Left side - Text content */}
         <div className="text-left">
             <button className='bg-gray-600 text-white px-2 py-2 rounded-2xl mb-4 mr-2 md:hidden' onClick={(e) => navigate('/add-question')}>Ask a Question</button>
-            <button className='bg-gray-600 text-white px-2 py-2 rounded-2xl mb-4 mr-2 md:hidden'> Answer</button>
+            <button className='bg-gray-600 text-white px-2 py-2 rounded-2xl mb-4 mr-2 md:hidden' onClick={(e) => navigate('/all-questions')}> Answer</button>
           <h1 className="text-4xl md:text-6xl font-extrabold text-gray-900 leading-tight">
             Made for Engineers,<br className="block" /> by Engineers
           </h1>

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function SignUp() {
     const { signUp, isLoading, error } = useSignUp();
+    const [errorMessage, setErrorMessage] = useState('');
 
     const [name, setName] = useState('');
     const [userId, setuserId] = useState('');
@@ -14,9 +15,12 @@ export default function SignUp() {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        await signUp(name, userId, password);
-        if (!error) {
+        const res = await signUp(name, userId, password);
+        if (res.success) {
             navigate('/');
+        }else{
+            console.log(res.error);
+            setErrorMessage(res.error);
         }
         
     }
@@ -45,6 +49,7 @@ export default function SignUp() {
         class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition font-medium" onClick={handleSubmit}>
         Sign Up
       </button>
+      {errorMessage && <div className="mt-4 text-red-500 text-sm">{errorMessage}</div>}
     </form>
     {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
   </div>

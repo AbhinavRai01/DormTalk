@@ -9,15 +9,22 @@ export default function Login() {
 
   const { logIn, isLoading, error } = useLogIn();
 
+  const [errorMessage, setErrorMessage] = useState('');
+
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await logIn(userId, password);
+    const res = await logIn(userId, password);
 
-    if (!error) {
+    if (res.success) {
       navigate('/');
+    }
+
+    else{
+      console.log(res.error);
+      setErrorMessage(res.error);
     }
   }
 
@@ -25,6 +32,7 @@ export default function Login() {
     <div class="flex items-center justify-center px-4">
   <div class="w-full max-w-md bg-white p-8 rounded-xl shadow-md">
     <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">Log In</h1>
+  
     <form action="/login" method="POST" class="space-y-5">
       <div>
         <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>

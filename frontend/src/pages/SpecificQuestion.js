@@ -137,6 +137,8 @@ const handleAnswerSubmit = (e) => {
 
   console.log("Answer submitted:", answerText);
   setAnswerText(""); // optional reset
+
+  window.location.reload();
 };
 
 useEffect(() => {
