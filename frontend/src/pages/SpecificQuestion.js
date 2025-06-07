@@ -112,7 +112,7 @@ const [url,setUrl] = useState("");
 }
 
 
-const handleAnswerSubmit = (e) => {
+const handleAnswerSubmit =async (e) => {
   e.preventDefault();
   const answer = {
     questionID: questionId,
@@ -122,7 +122,7 @@ const handleAnswerSubmit = (e) => {
     imageURL: url
   };
 
-  const response = fetch('https://dormtalk.onrender.com/api/answers/add/', {
+  const response = await fetch('https://dormtalk.onrender.com/api/answers/add/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -132,7 +132,6 @@ const handleAnswerSubmit = (e) => {
 
   if (!response.ok) {
     console.error('Error submitting answer:', response.statusText);
-    return;
   }
 
   console.log("Answer submitted:", answerText);
@@ -238,7 +237,7 @@ return (
         className="w-10 h-10 rounded-full"
       />
       <div className="text-slate-600 text-sm">
-        <span className="font-medium text-slate-700 hover:text-blue-600" onClick={() => {navigate('/profile/'+question.senderID)}}>By: {question.senderID}</span>
+        By:<span className="font-medium text-slate-700 cursor-pointer hover:text-blue-600" onClick={() => {navigate('/profile/'+question.senderID)}}> {question.senderID}</span>
       </div>
     </div>
 
@@ -284,16 +283,17 @@ return (
 
   {/* Image Upload and Submit Button */}
   <div className="mt-4 flex items-end justify-between gap-4 flex-wrap">
-    <div className="flex-1 min-w-[200px]">
-      <label className="block mb-1 text-sm text-left font-medium text-gray-700">
-        Upload image (optional)
-      </label>
-      <input
-        type="file"
-        onChange={handleImageUpload}
-        className="block w-full text-sm text-gray-700"
-      />
-    </div>
+   <div className="flex flex-col gap-2 min-w-[200px]">
+  <label className="text-sm text-left font-medium text-gray-700">
+    Upload image <span className="text-gray-500">(optional)</span>
+  </label>
+  <input
+    type="file"
+    onChange={handleImageUpload}
+    className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm text-gray-700 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-sm file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+  />
+</div>
+
 
     <button
       type="submit"

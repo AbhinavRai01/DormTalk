@@ -19,7 +19,7 @@ export default function Header() {
   return (
   <header className="white font-lexend text-grey-900 shadow-md px-8 py-6">
     <div className="w-full mx-auto flex flex-col md:flex-row justify-between items-center">
-      <h1 className="text-3xl font-bold">DormTalk</h1>
+      <a href="/"><h1 className="text-3xl font-bold">DormTalk</h1></a>
       <nav className="mt-4 md:mt-0 flex items-center space-x-4">
         <a href="/add-question" className="ttext-grey-900 px-3 hover:text-grey-600 font-medium hidden md:inline">Ask a Question</a>
         <a href="/all-questions" className="text-grey-900 px-3 hover:text-grey-600 font-medium hidden md:inline">Answer Questions</a>

@@ -55,6 +55,7 @@ const Profile = () => {
           }
 
           setFollowing(false);
+          setFollowers(followers-1);
         } else {
           console.error("Failed to unfollow user");
         }
@@ -88,6 +89,7 @@ const Profile = () => {
           }
 
           setFollowing(true);
+          setFollowers(followers+1);
         } else {
           console.error("Failed to follow user");
         }

@@ -7,7 +7,8 @@ export default function AnswerList({ answer, index, likedAnswer, userId }) {
 
   const [like, setLike] = useState(likedAnswer?.includes(answer._id) || false);
   const [pfp,setPfp] = useState("");
-
+  const [likes,setLikes] = useState(answer.likes);
+  
   const likeHandle = async (e, answerId) => {
     e.preventDefault();
 
@@ -25,11 +26,19 @@ export default function AnswerList({ answer, index, likedAnswer, userId }) {
       const inc = incObj.inc;
 
       const endpoint = inc === 1 ? 'like' : 'unlike';
+
+      
       const response = await fetch(`https://dormtalk.onrender.com/api/answers/${endpoint}`, {
         method: 'POST',
         body: JSON.stringify({ answerId }),
         headers: { 'Content-Type': 'application/json' }
       });
+
+      if (inc === 1) {
+        setLikes(likes + 1);
+      }else{
+        setLikes(likes - 1);
+      }
 
       if (response.ok) {
         setLike(inc === 1);
@@ -72,7 +81,7 @@ export default function AnswerList({ answer, index, likedAnswer, userId }) {
 
       {/* Content */}
       <div className="flex-1">
-        <p className="font-semibold text-left text-slate-800 hover:text-blue-600" onClick={()=>navigate('/profile/'+answer.senderID)}>{answer.senderID || 'Anonymous'}</p>
+        <p className="font-semibold text-left text-slate-800 cursor-pointer hover:text-blue-600" onClick={()=>navigate('/profile/'+answer.senderID)}>{answer.senderID || 'Anonymous'}</p>
         <p className="text-slate-700 mt-1 text-left whitespace-pre-line">{answer.content}</p>
 
         {answer.imageURL && (
@@ -91,7 +100,7 @@ export default function AnswerList({ answer, index, likedAnswer, userId }) {
 >
         {like ? "Unlike" : "Like"}
       </button>
-      <p className="text-gray-500 text-sm">{answer.likes} {answer.likes === 1 ? 'like' : 'likes'}</p>
+      <p className="text-gray-500 text-sm">{likes} {likes === 1 ? 'like' : 'likes'}</p>
     </div>
       </div>
     </div>

@@ -6,7 +6,7 @@ import { storage } from "../config/firebase";
 import { useNavigate } from 'react-router-dom';
 
 export default function AddQuestion() {
-  const { user,loading } = useAuthContext();
+  const { user, loading } = useAuthContext();
   const navigate = useNavigate();
 
   const [questionName, setQuestionName] = useState("");
@@ -68,7 +68,7 @@ export default function AddQuestion() {
 
       const data = await response.json();
       console.log('Question submitted successfully:', data);
-       // Redirect to the questions list page
+      // Redirect to the questions list page
     } catch (error) {
       console.error('Error submitting question:', error);
     }
@@ -88,9 +88,9 @@ export default function AddQuestion() {
       <main className="max-w-4xl mx-auto px-2 py-4 sm:px-6 py-16">
         <h2 className="text-3xl font-bold text-slate-800 mb-8 text-center">Ask a Question</h2>
 
-        <form className="bg-white p-8 rounded-2xl shadow-md space-y-6" onSubmit={handleSubmit}>
+        <form className="bg-white p-8 text-left rounded-2xl shadow-md space-y-6" onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="question" className="block text-sm font-medium text-gray-700 mb-1">Question</label>
+            <label htmlFor="question" className="block text-lg font-medium text-gray-700 mb-1">Question</label>
             <input type="text" id="question" name="question" value={questionName}
               onChange={(e) => setQuestionName(e.target.value)}
               className="w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-200 focus:border-blue-400 px-4 py-2"
@@ -98,7 +98,7 @@ export default function AddQuestion() {
           </div>
 
           <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+            <label htmlFor="description" className="block text-lg font-medium text-gray-700 mb-1">Description</label>
             <textarea id="description" name="description" rows="5"
               onChange={(e) => setQuestionDescription(e.target.value)}
               className="w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-200 focus:border-blue-400 px-4 py-2"
@@ -106,7 +106,7 @@ export default function AddQuestion() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Tags</label>
+            <label className="block text-lg font-medium text-gray-700 mb-2">Tags</label>
             <Select
               isMulti
               name="tags"
@@ -117,17 +117,25 @@ export default function AddQuestion() {
               placeholder="Search and select tags..."
             />
           </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Upload Image</label>
-            <input type="file" onChange={handleImageUpload} />
+    <div className='mt-4 flex items-end justify-between gap-4 flex-wrap'>
+          <div className="flex flex-col gap-2 min-w-[200px]">
+            <label className="text-sm text-left font-medium text-gray-700">
+              Upload image <span className="text-gray-500">(optional)</span>
+            </label>
+            <input
+              type="file"
+              onChange={handleImageUpload}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-sm text-gray-700 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-sm file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+            />
           </div>
+
 
           <div className="text-right">
             <button type="submit"
               className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md shadow-sm font-medium transition">
               Post Question
             </button>
+          </div>
           </div>
         </form>
       </main>
