@@ -2,7 +2,7 @@
 const express = require('express');
 
 const router = express.Router();
-const { getQuestions, getQuestion, addQuestion,increaseLike,decreaseLike } = require('../controllers/questionsController');
+const { getQuestions, getQuestion, addQuestion,increaseLike,decreaseLike, uploadSageAnswer } = require('../controllers/questionsController');
 const {searchQuestion} = require('../controllers/searchQuestion')
 
 // Route to get all questions
@@ -20,6 +20,8 @@ router.post('/search', searchQuestion);
 
 // Route to get a specific question by ID
 router.get('/:id', getQuestion);
+
+router.post('/sageanswer/:id', uploadSageAnswer);
 
 // Export the router
 module.exports = router;

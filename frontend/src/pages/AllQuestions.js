@@ -32,7 +32,7 @@ export default function AllQuestions() {
       setLoading(true);
       try {
         
-        const response = await fetch('https://dormtalk.onrender.com/api/questions/search', {
+        const response = await fetch('http://localhost:5000/api/questions/search', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -186,9 +186,9 @@ export default function AllQuestions() {
           </div>
         )}
       </main>
-      <div className={`grid grid-cols-${Math.ceil(count / 10)} w-[50%] items-center mx-auto`}>
+      <div className={`grid grid-cols-${Math.ceil(count / 10)} w-[50%] justify-around items-center mx-auto`}>
         {Array.from({ length: Math.ceil(count / 10) }).map((_, i) => (
-          <button key={i} className="p-2 bg-gray-200 w-[7%] rounded items-center mx-auto hover:bg-gray-300"onClick={(e)=>{setPage(i)}}>
+          <button key={i} className="p-2 bg-gray-200 w-[10%] rounded items-center mx-auto hover:bg-gray-300"onClick={(e)=>{setPage(i)}}>
             {i + 1}
           </button>
         ))}

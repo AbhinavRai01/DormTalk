@@ -13,6 +13,7 @@ export default function AddQuestion() {
   const [questionDescription, setQuestionDescription] = useState("");
   const [tags, setTags] = useState([]);
   const [url, setUrl] = useState("");
+  const [error,setError] = useState("");
 
   const allTags = [
     'Maths', 'Physics', 'Chemistry', 'Mechanical', 'Electrical', 'Civil', 'Computer Science',
@@ -45,6 +46,11 @@ export default function AddQuestion() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (tags.length == 0) {
+      setError("Please select at least one tag.");
+      return;
+    }
+    
     const questionData = {
       question: questionName,
       description: questionDescription,
@@ -54,7 +60,7 @@ export default function AddQuestion() {
     };
 
     try {
-      const response = await fetch('https://dormtalk.onrender.com/api/questions/add', {
+      const response = await fetch('http://localhost:5000/api/questions/add', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -131,6 +137,7 @@ export default function AddQuestion() {
 
 
           <div className="text-right">
+            {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
             <button type="submit"
               className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md shadow-sm font-medium transition">
               Post Question
@@ -139,6 +146,7 @@ export default function AddQuestion() {
           </div>
         </form>
       </main>
+
     </div>
   );
 }

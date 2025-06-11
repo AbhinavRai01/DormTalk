@@ -25,6 +25,10 @@ const questionSchema = new Schema({
     imageURL :{
         type : String,
         default : ""
+    },
+    sageAnswer :{
+        type: String,
+        default: ""
     }
 }, { timestamps: true });
 

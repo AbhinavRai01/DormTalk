@@ -9,7 +9,7 @@ export const useSignUp = () => {
     const [isLoading, setIsLoading] = useState(null);
 
     const signUp = async (name, userId, password) => {
-        const response = await fetch('https://dormtalk.onrender.com/api/users/signup', {
+        const response = await fetch('http://localhost:5000/api/users/signup', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ name, userId, password }),

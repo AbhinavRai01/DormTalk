@@ -76,10 +76,23 @@ const decreaseLike = async (req, res) => {
 
 }
 
+const uploadSageAnswer = async (req,res) =>{
+    try{
+        const questionId = req.params.id;
+        const {answer} = req.body;
+
+        await Question.findByIdAndUpdate({_id: questionId}, {sageAnswer: answer});
+        res.status(200).json("SENT SAGE ANSWER");
+    }catch(err){
+        res.status(500).json(err);
+    }
+}
+
 module.exports = {
     getQuestions,
     getQuestion,
     increaseLike,
     decreaseLike,
-    addQuestion
+    addQuestion,
+    uploadSageAnswer
 }
