@@ -41,7 +41,7 @@ export default function SpecificQuestion() {
 
     const likeAnswer = async () => {
       try {
-        const response1 = await fetch('http://localhost:5000/api/users/likeQuestion', {
+        const response1 = await fetch('https://dormtalk.onrender.com/api/users/likeQuestion', {
           method: 'POST',
           body: JSON.stringify({
             curUserID: user.userId,
@@ -56,7 +56,7 @@ export default function SpecificQuestion() {
           console.log(inc);
 
           if (inc === 1) {
-            const response2 = await fetch('http://localhost:5000/api/questions/like', {
+            const response2 = await fetch('https://dormtalk.onrender.com/api/questions/like', {
               method: 'POST',
               body: JSON.stringify({ questionId: questionId }),
               headers: { 'Content-Type': 'application/json' }
@@ -72,7 +72,7 @@ export default function SpecificQuestion() {
             }
 
           } else if (inc === -1) {
-            const response2 = await fetch('http://localhost:5000/api/questions/unlike', {
+            const response2 = await fetch('https://dormtalk.onrender.com/api/questions/unlike', {
               method: 'POST',
               body: JSON.stringify({ questionId: questionId }),
               headers: { 'Content-Type': 'application/json' }
@@ -150,7 +150,7 @@ export default function SpecificQuestion() {
       }
 
       // Send to server
-      const serverResponse = await fetch(`http://localhost:5000/api/questions/sageanswer/${question._id}`, {
+      const serverResponse = await fetch(`https://dormtalk.onrender.com/api/questions/sageanswer/${question._id}`, {
         method: 'POST',
         body: JSON.stringify({ answer: sageResponse.text }),
         headers: { 'Content-Type': 'application/json' }
@@ -181,7 +181,7 @@ export default function SpecificQuestion() {
       imageURL: url
     };
 
-    const response = await fetch('http://localhost:5000/api/answers/add/', {
+    const response = await fetch('https://dormtalk.onrender.com/api/answers/add/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -206,7 +206,7 @@ export default function SpecificQuestion() {
 
       console.log("Question id:", questionId);
       try {
-        const response = await fetch(`http://localhost:5000/api/questions/${questionId}`);
+        const response = await fetch(`https://dormtalk.onrender.com/api/questions/${questionId}`);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
         console.log(data);
@@ -215,7 +215,7 @@ export default function SpecificQuestion() {
         setSageAnswer(data.sageAnswer);
         setLikesCount(data.likes);
 
-        const imgResponse = await fetch(`http://localhost:5000/api/users/getpfp/${data.senderID}`);
+        const imgResponse = await fetch(`https://dormtalk.onrender.com/api/users/getpfp/${data.senderID}`);
         const imgaData = await imgResponse.json();
         setPfp(imgaData.imageURL);
       } catch (error) {
@@ -227,7 +227,7 @@ export default function SpecificQuestion() {
 
     const fetchAnswers = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/answers/question/${questionId}`);
+        const response = await fetch(`https://dormtalk.onrender.com/api/answers/question/${questionId}`);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
         console.log(data);

@@ -12,7 +12,7 @@ export default function AnswerList({ answer, index, likedAnswer, userId }) {
   const likeHandle = async (e, answerId) => {
     e.preventDefault();
 
-    const response1 = await fetch('http://localhost:5000/api/users/likeAnswer', {
+    const response1 = await fetch('https://dormtalk.onrender.com/api/users/likeAnswer', {
       method: 'POST',
       body: JSON.stringify({
         curUserID: userId,
@@ -28,7 +28,7 @@ export default function AnswerList({ answer, index, likedAnswer, userId }) {
       const endpoint = inc === 1 ? 'like' : 'unlike';
 
       
-      const response = await fetch(`http://localhost:5000/api/answers/${endpoint}`, {
+      const response = await fetch(`https://dormtalk.onrender.com/api/answers/${endpoint}`, {
         method: 'POST',
         body: JSON.stringify({ answerId }),
         headers: { 'Content-Type': 'application/json' }
@@ -55,7 +55,7 @@ export default function AnswerList({ answer, index, likedAnswer, userId }) {
 
     try {
       const fetchPfp = async() => {
-        const imgResponse = await fetch(`http://localhost:5000/api/users/getpfp/${answer.senderID}`);
+        const imgResponse = await fetch(`https://dormtalk.onrender.com/api/users/getpfp/${answer.senderID}`);
         const imgaData = await imgResponse.json();
         setPfp(imgaData.imageURL);
       }

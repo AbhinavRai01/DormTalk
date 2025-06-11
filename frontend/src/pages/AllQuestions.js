@@ -32,7 +32,7 @@ export default function AllQuestions() {
       setLoading(true);
       try {
         
-        const response = await fetch('http://localhost:5000/api/questions/search', {
+        const response = await fetch('https://dormtalk.onrender.com/api/questions/search', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
