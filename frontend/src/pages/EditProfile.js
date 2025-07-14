@@ -52,7 +52,7 @@ export default function EditProfile() {
     const userId = user.userId;
     const updateUserData = async () => {
       try {
-        const response = await fetch(`https://dormtalk.onrender.com/api/users/update/${userId}`, {
+        const response = await fetch(`http://localhost:5000/api/users/update/${userId}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ export default function EditProfile() {
         console.log(userId);
         const fetchUserData = async () => {
             try {
-                const response = await fetch(`https://dormtalk.onrender.com/api/users/${userId}`);
+                const response = await fetch(`http://localhost:5000/api/users/${userId}`);
 
                 console.log(response);
                 if (!response.ok) {

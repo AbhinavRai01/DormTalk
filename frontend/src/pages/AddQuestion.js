@@ -61,7 +61,7 @@ export default function AddQuestion() {
     };
 
     try {
-      const response = await fetch('https://dormtalk.onrender.com/api/questions/add', {
+      const response = await fetch('http://localhost:5000/api/questions/add', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

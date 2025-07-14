@@ -3,9 +3,10 @@ const mongoose = require("mongoose");
 const questionRoutes = require("./routers/questionRoutes");
 const userRoutes = require("./routers/userRoutes");
 const answerRoutes = require("./routers/answerRoutes");
-const cors = require("cors");
+const commentRoutes = require("./routers/commentRoutes");
+const postRoutes = require("./routers/postRoutes");
 
-const Question = require("./schemas/questions");
+const cors = require("cors");
 
 const app  = express();
 
@@ -27,6 +28,8 @@ app.use(express.json());
 app.use('/api/questions', questionRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/answers', answerRoutes);
+app.use('/api/comments', commentRoutes);
+app.use('/api/posts', postRoutes);
 
 app.use(express.urlencoded({ extended: true }));
 

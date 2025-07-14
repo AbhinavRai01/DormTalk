@@ -14,6 +14,7 @@ import Login from './pages/Login';
 import Profile from './pages/ProfilePage';
 import EditProfile from './pages/EditProfile';
 import NewHome from './pages/NewHome';
+import NewSMHome from './pages/SocialMediaPages/NewSMHome';
 
 function App() {
   return (
@@ -30,7 +31,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/profile/:userId" element={<Profile/>} />
             <Route path='/edit-profile' element={<EditProfile />} />
-            <Route path="/new-home" element={<NewHome />} />
+            <Route path="/new-home" element={<NewSMHome />} />
           </Routes>
         </Router>
       </main>

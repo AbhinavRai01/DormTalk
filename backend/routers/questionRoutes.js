@@ -9,7 +9,6 @@ const {searchQuestion} = require('../controllers/searchQuestion')
 router.get('/', getQuestions);
 
 
-
 // Route to add a new question
 router.post('/add', addQuestion);
 
