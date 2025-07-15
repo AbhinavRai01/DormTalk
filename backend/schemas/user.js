@@ -31,6 +31,10 @@ const userSchema = new Schema({
         type: [String],
         default: []
     },
+    joinedClusters: {
+        type: [String],
+        default: [],
+    },
     imageURL:{
         type: String,
         default:"https://firebasestorage.googleapis.com/v0/b/forumapp-fead5.firebasestorage.app/o/profilephotos%2Fpp.jpg?alt=media&token=62168b08-8a30-4a39-a0b8-57c9af414224"

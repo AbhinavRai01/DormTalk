@@ -10,8 +10,9 @@ const postSchema = new Schema({
         type: String,
         required: true
     },
-    tags: {
-        type: [String],
+    cluster: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Cluster',
         required: true
     },
     authorID: {

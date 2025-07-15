@@ -15,6 +15,8 @@ import Profile from './pages/ProfilePage';
 import EditProfile from './pages/EditProfile';
 import NewHome from './pages/NewHome';
 import NewSMHome from './pages/SocialMediaPages/NewSMHome';
+import ClusterPage from './pages/SocialMediaPages/ClusterPage';
+import CreatePost from './pages/SocialMediaPages/CreatePost';
 
 function App() {
   return (
@@ -32,6 +34,8 @@ function App() {
             <Route path="/profile/:userId" element={<Profile/>} />
             <Route path='/edit-profile' element={<EditProfile />} />
             <Route path="/new-home" element={<NewSMHome />} />
+            <Route path="/clusters/:clusterName" element={<ClusterPage />} />
+            <Route path="/create-post" element={<CreatePost />} />
           </Routes>
         </Router>
       </main>

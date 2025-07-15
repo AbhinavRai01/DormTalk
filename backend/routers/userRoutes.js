@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { getUser, loginUser, signupUser,unfollowUser, likeAnswer,likeQuestion,followUser,increaseFollowers,decreaseFollowers,updateProfile, getProfilePicture } = require('../controllers/userController');
+const { getUser, loginUser, signupUser,unfollowUser, likeAnswer,
+    likeQuestion,followUser,increaseFollowers,decreaseFollowers,updateProfile,
+     getProfilePicture, joinCluster, leaveCluster } = require('../controllers/userController');
 
 router.get('/getpfp/:id', getProfilePicture);
 router.get('/:id', getUser);
@@ -13,6 +15,8 @@ router.post('/decreaseFollowers', decreaseFollowers);
 router.post('/followuser',followUser);
 router.post('/unfollowuser', unfollowUser);
 router.post('/update/:id',updateProfile);
+router.post('/joinCluster', joinCluster);
+router.post('/leaveCluster', leaveCluster);
 
 module.exports = router;
 

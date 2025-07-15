@@ -6,7 +6,7 @@ import QuestionTabs from '../components/QuestionTabs';
 export default function NewSMHome() {
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen p-6">
       <div className="max-w-6xl mx-auto flex gap-6">
         <QuestionTabs />
         <div className="w-80 space-y-6">

@@ -11,6 +11,7 @@ export default function PostItem({postId}) {
             try {
                 const response = await axios.get(`http://localhost:5000/api/posts/${postId}`);
                 setPost(response.data);
+                console.log("Post fetched:", response.data);
             } catch (error) {
                 console.error("Error fetching post:", error);
             }
@@ -21,7 +22,7 @@ export default function PostItem({postId}) {
 
    return (
     <div className="bg-white shadow rounded-lg p-4 mb-4">
-      <div className="text-sm text-gray-500 mb-1">{post.tags ? post.tags[0] : "No tags"} • Posted by {post.authorID} • 5 views</div>
+      <div className="text-sm text-gray-500 mb-1">{post.cluster ? post.cluster.name : "No tags"} • Posted by {post.authorID} • 5 views</div>
       <div className="text-lg font-semibold mb-2">{post.title}</div>
       <div className="text-gray-700 mb-3">{post.content}</div>
       <div className="flex gap-4 text-sm text-gray-600">

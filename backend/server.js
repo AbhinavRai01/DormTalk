@@ -5,6 +5,7 @@ const userRoutes = require("./routers/userRoutes");
 const answerRoutes = require("./routers/answerRoutes");
 const commentRoutes = require("./routers/commentRoutes");
 const postRoutes = require("./routers/postRoutes");
+const clusterRoutes = require('./routers/clusterRoutes');
 
 const cors = require("cors");
 
@@ -30,6 +31,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/answers', answerRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/posts', postRoutes);
+app.use('/api/clusters', clusterRoutes);
 
 app.use(express.urlencoded({ extended: true }));
 

@@ -2,11 +2,11 @@ const Post = require('../schemas/post');
 const User = require('../schemas/user');
 
 const createPost = async (req, res) => {
-    const { title, content, tags, authorID, imageURL } = req.body;
+    const { title, content, cluster, authorID, imageURL } = req.body;
     const newPost = new Post({
         title,
         content,
-        tags,
+        cluster,
         authorID,
         imageURL
     });
@@ -35,7 +35,7 @@ const getPostById = async (req, res) => {
     const { postId } = req.params;
 
     try {
-        const post = await Post.findById(postId);
+        const post = await Post.findById(postId).populate('cluster', 'name');
         if (!post) {
             return res.status(404).send("Post not found");
         }
@@ -86,6 +86,21 @@ const getFeedPosts = async (req, res) => {
     }
 }
 
+const getPostbyCluster = async (req, res) => {
+    const { clusterId } = req.params;
+
+    try {
+        const posts = await Post.find({ cluster: clusterId }).sort({ createdAt: -1 }).select('_id');
+        if (!posts.length) {
+            return res.status(404).send("No posts found for this cluster");
+        }
+        res.status(200).json(posts);
+    } catch (err) {
+        console.error("Error fetching posts by cluster", err);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
 const deletePost = async (req, res) => {
     const { postId } = req.params;
 
@@ -101,4 +116,4 @@ const deletePost = async (req, res) => {
     }
 }
 
-module.exports = {createPost, getPostsByUser, getPostById, updateLikes, getFeedPosts, deletePost};
+module.exports = {createPost, getPostsByUser, getPostById,getPostbyCluster, updateLikes, getFeedPosts, deletePost};

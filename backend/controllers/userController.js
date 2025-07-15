@@ -1,4 +1,5 @@
 const User = require('../schemas/user')
+const Cluster = require('../schemas/clusters');
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 
@@ -207,4 +208,67 @@ const getProfilePicture = async(req,res) =>{
 
   res.status(200).json(imageUrl);
 }
-module.exports = { getUser, signupUser, loginUser,unfollowUser, followUser, likeQuestion, likeAnswer, increaseFollowers, decreaseFollowers, updateProfile,getProfilePicture};
+
+const joinCluster = async (req, res) => {
+  const { clusterId, userId } = req.body;
+
+  try {
+    const user = await User.findOne({ userId });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    if (user.joinedClusters.includes(clusterId)) {
+      return res.status(400).json({ error: "Already a member of this cluster" });
+    }
+    user.joinedClusters.push(clusterId);
+    await user.save();
+
+    const cluster = await Cluster.findById(clusterId);
+    if (!cluster) {
+      return res.status(404).json({ error: "Cluster not found" });
+    }
+    cluster.members.push(user._id);
+    await cluster.save();
+    res.status(200).json({ message: "Successfully joined the cluster" });
+  } catch (error) {
+    console.error("Error joining cluster", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+const leaveCluster = async (req, res) => {
+  const { clusterId, userId } = req.body;
+
+  try {
+    const user = await User.findOne({ userId });
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    if (!user.joinedClusters.includes(clusterId)) {
+      return res.status(400).json({ error: "User is not a member of this cluster" });
+    }
+
+    // Remove clusterId from user's joinedClusters
+    user.joinedClusters = user.joinedClusters.filter(id => id.toString() !== clusterId);
+    await user.save();
+
+    const cluster = await Cluster.findById(clusterId);
+    if (!cluster) {
+      return res.status(404).json({ error: "Cluster not found" });
+    }
+
+    // Remove user ID from cluster members
+    cluster.members = cluster.members.filter(id => id.toString() !== user._id.toString());
+    await cluster.save();
+
+    res.status(200).json({ message: "Successfully left the cluster" });
+  } catch (error) {
+    console.error("Error leaving cluster", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+
+module.exports = { getUser, signupUser, loginUser,unfollowUser, followUser, likeQuestion,
+   likeAnswer, increaseFollowers, decreaseFollowers, updateProfile,getProfilePicture, joinCluster, leaveCluster};
