@@ -6,6 +6,7 @@ const answerRoutes = require("./routers/answerRoutes");
 const commentRoutes = require("./routers/commentRoutes");
 const postRoutes = require("./routers/postRoutes");
 const clusterRoutes = require('./routers/clusterRoutes');
+const Cluster = require('./schemas/clusters');
 
 const cors = require("cors");
 
@@ -23,6 +24,9 @@ mongoose.connect(MongoURI, {
 }).catch((err) => {
     console.error("Error connecting to MongoDB", err);
 });
+
+Cluster.collection.dropIndex("name_1");
+Cluster.collection.createIndex({name: 1});
 
 app.use(express.json());
 

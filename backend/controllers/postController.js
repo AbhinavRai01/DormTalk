@@ -26,7 +26,7 @@ const getPostsByUser = async (req, res) => {
     try {
         const posts = await Post.find({ authorID: userId });
         res.status(200).json(posts);
-    }catch(err){
+    } catch (err) {
         console.error("Error fetching posts", err);
     }
 }
@@ -46,8 +46,8 @@ const getPostById = async (req, res) => {
     }
 }
 
-const updateLikes = async (req,res) =>{
-    const { postId, action } = req.body;
+const updateLikes = async (req, res) => {
+    const { postId, action, userId } = req.body;
 
     try {
         const post = await Post.findById(postId);
@@ -56,9 +56,9 @@ const updateLikes = async (req,res) =>{
         }
 
         if (action === 'increase') {
-            post.likes += 1;
+            post.likes.push(userId);
         } else if (action === 'decrease') {
-            post.likes -= 1;
+            post.likes = post.likes.filter(item => item != userId);
         } else {
             return res.status(400).send("Invalid action");
         }
@@ -73,12 +73,19 @@ const updateLikes = async (req,res) =>{
 
 const getFeedPosts = async (req, res) => {
     try {
-        const {userId} = req.body;
-        const user = await User.find({userId});
-        const following = user.followedUser || [];
+        const { userId } = req.body;
+        const user = await User.findOne({ userId });
+        console.log(user);
+        const following = user.followedUsers || [];
+        const joinedClusters = user.joinedClusters || [];
         following.push(userId); // Include the user's own posts
 
-        const posts = await Post.find({authorID : { $in : following}}).sort({ createdAt: -1 }).limit(20).select('_id');
+        console.log(following);
+
+        const posts = await Post.find({$or: [
+            { authorID: { $in: following } },
+            { cluster: { $in: joinedClusters } }
+        ]}).sort({ createdAt: -1 }).limit(20).select('_id');
         res.status(200).json(posts);
     } catch (err) {
         console.error("Error fetching feed posts", err);
@@ -108,7 +115,7 @@ const deletePost = async (req, res) => {
         const post = await Post.findByIdAndDelete(postId);
         if (!post) {
             return res.status(404).send("Post not found");
-        }  
+        }
         res.status(200).send("Post deleted successfully");
     } catch (err) {
         console.error("Error deleting post", err);
@@ -116,4 +123,4 @@ const deletePost = async (req, res) => {
     }
 }
 
-module.exports = {createPost, getPostsByUser, getPostById,getPostbyCluster, updateLikes, getFeedPosts, deletePost};
+module.exports = { createPost, getPostsByUser, getPostById, getPostbyCluster, updateLikes, getFeedPosts, deletePost };

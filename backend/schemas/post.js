@@ -20,8 +20,8 @@ const postSchema = new Schema({
         required: true
     },
     likes:{
-        type:Number,
-        default:0
+        type:[String],
+        default:[]
     },
     imageURL:{
         type: String,

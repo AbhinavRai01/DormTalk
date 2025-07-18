@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './pages/home';
+import PostPage from './pages/SocialMediaPages/PostPage';
 import AllQuestions from './pages/AllQuestions';
 import AddQuestion from './pages/AddQuestion';
 import SpecificQuestion from './pages/SpecificQuestion';
@@ -36,9 +36,10 @@ function App() {
             <Route path="/new-home" element={<NewSMHome />} />
             <Route path="/clusters/:clusterName" element={<ClusterPage />} />
             <Route path="/create-post" element={<CreatePost />} />
+            <Route path="/posts/:id" element={<PostPage />} />
           </Routes>
         </Router>
-      </main>
+      </main> 
       <Footer />
     </div>
      

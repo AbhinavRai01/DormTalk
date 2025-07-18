@@ -41,8 +41,20 @@ const getClusterByName = async (req, res) => {
     }
 }
 
+const clusterSearchForForm = async (req,res) =>{
+    const {query} = req.params;
+    try {
+        const clusters = await Cluster.find({ name: { $regex: query, $options: 'i' } }).limit(4);
+        res.status(200).json(clusters);
+    } catch (err) {
+        console.error("Error searching clusters", err);
+        res.status(500).send("Internal Server Error");
+    }
+}
+
 module.exports = {
     createCluster,
     getClusterById,
-    getClusterByName
+    getClusterByName,
+    clusterSearchForForm
 };

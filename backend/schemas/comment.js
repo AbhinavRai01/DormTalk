@@ -13,8 +13,12 @@ const commentSchema = new Schema({
     authorID: {
         type: String,
         required: true
+    },
+    likes:{
+        type: [String],
+        default: []
     }
 })
 
-mongoose.model('Comment', commentSchema);
-module.exports = commentSchema;
+const Comment = mongoose.model('Comment', commentSchema);
+module.exports = Comment;
